@@ -8,18 +8,7 @@
 
 ## 1. 快速启动
 
-### 方式 A：Docker Compose（推荐）
-1. 复制环境变量：`cp .env.example .env`
-2. 启动：`docker compose up --build`
-3. 执行迁移与管理员初始化（在 web 容器内）：
-   - `npm run db:migrate`
-   - `npm run db:seed-admin`
-4. 导入旧内容：`npm run migrate:legacy`
-5. 访问：
-   - 前台：`http://localhost:3000/en`、`http://localhost:3000/zh`
-   - 后台：`http://localhost:3000/admin/login`
-
-### 方式 B：本地开发
+### 本地开发
 1. 无需额外数据库服务（使用本地 SQLite 文件）
 2. `npm install`
 3. `cp .env.example .env` 并填好连接串
