@@ -1,0 +1,1165 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <title>How To Rise</title>
+    <link rel="icon" href="./assets/favicon.ico" />
+    <!-- Font Awesome for icons -->
+    <script src="https://kit.fontawesome.com/72a6db660f.js" crossorigin="anonymous"></script>
+    <!-- marked.js for Markdown parsing -->
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <!-- DOMPurify for XSS-safe HTML -->
+    <script src="https://cdn.jsdelivr.net/npm/dompurify@3.1.7/dist/purify.min.js"></script>
+    <!-- Cursur effect -->
+    <script src="https://unpkg.com/cursor-effects@latest/dist/browser.js"></script>
+    
+    <!--REDRIRECT TO UNAVAILABLE-->
+  <!--  <meta http-equiv="refresh" content="0; url=unavailable.html" />-->
+    
+  <!--  <script>-->
+    <!-- 备用 JS 跳转（防止 meta 不生效的情况）-->
+  <!--  window.location.href = "unavailable.html";-->
+  <!--</script>-->
+    
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            margin: 0;
+            background: #fff;
+            color: #1d1d1f;
+            transition: background 0.3s ease, color 0.3s ease;
+        }
+
+        body.dark-theme {
+            background: #000;
+            color: #f5f5f7;
+        }
+
+        /* 顶部导航（新增品牌与右侧操作） */
+        nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            backdrop-filter: blur(10px);
+            background: rgba(255, 255, 255, 0.7);
+            border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 30px;
+            padding: 15px 20px;
+            z-index: 1000;
+        }
+
+        .nav-brand {
+            position: absolute;
+            left: 20px;
+            display: flex;
+            align-items: center;
+        }
+
+        /* 动态渐变：导航栏品牌文字 */
+        .nav-brand .brand-text {
+            font-weight: 700;
+            font-size: 1.1rem;
+            background: linear-gradient(90deg, #0071e3, #6f42c1, #ff2d55);
+            background-clip: text;
+            -webkit-background-clip: text;
+            color: transparent;
+            /* 兼容 Firefox 等 */
+            -webkit-text-fill-color: transparent;
+            /* 兼容 WebKit */
+            display: inline-block;
+            /* 确保背景可动画 */
+            background-size: 300% 300%;
+            /* 扩大流动范围 */
+            background-position: 0% 50%;
+            /* 初始位置 */
+            animation: brandGradient 5s linear infinite;
+            will-change: background-position;
+        }
+
+        @keyframes brandGradient {
+            0% {
+                background-position: 0% 50%;
+            }
+
+            50% {
+                background-position: 100% 50%;
+            }
+
+            100% {
+                background-position: 0% 50%;
+            }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            .nav-brand .brand-text {
+                animation: none;
+            }
+        }
+
+        .nav-center {
+            display: flex;
+            gap: 30px;
+        }
+
+        .nav-actions {
+            position: absolute;
+            right: 20px;
+            display: flex;
+            align-items: center;
+            gap: 14px;
+        }
+
+        .switch-group {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .switch-text {
+            font-size: 12px;
+            opacity: 0.8;
+            user-select: none;
+        }
+
+        body.dark-theme .switch-text {
+            opacity: 0.9;
+        }
+
+        /* 开关内图标布局 */
+        .switch-slider .fa-solid {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 12px;
+            color: #fff;
+            opacity: 0.9;
+            pointer-events: none;
+        }
+
+        .switch--theme .switch-icon-left {
+            left: 6px;
+        }
+
+        .switch--theme .switch-icon-right {
+            right: 6px;
+        }
+
+        .switch--cursor .switch-icon-center {
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        /* 使位于导航中的主题按钮为静态布局，覆盖旧的悬浮样式 */
+        nav .theme-toggle {
+            position: static;
+            bottom: auto;
+            right: auto;
+            background: transparent;
+            color: inherit;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            box-shadow: none;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        nav .theme-toggle:hover {
+            background: rgba(0, 0, 0, 0.06);
+        }
+
+        body.dark-theme nav .theme-toggle:hover {
+            background: rgba(255, 255, 255, 0.12);
+        }
+
+        nav a {
+            text-decoration: none;
+            color: #1d1d1f;
+            font-weight: 500;
+            font-size: 15px;
+        }
+
+        nav a:hover {
+            color: #0071e3;
+        }
+
+        body.dark-theme nav {
+            background: rgba(0, 0, 0, 0.7);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        body.dark-theme nav a {
+            color: #f5f5f7;
+        }
+
+        /* Hero */
+        header {
+            padding: 140px 20px 80px;
+            text-align: center;
+            animation: fadeIn 1s ease-in-out;
+        }
+
+        /* 覆盖 Hero 标题默认为纯色（跟随主题颜色） */
+        header h1 {
+            font-size: clamp(3rem, 7vw, 3.5rem);
+            /* 提高最小/最大值，避免显小 */
+            font-weight: 600;
+            margin: 0;
+            color: inherit;
+            /* 默认跟随主题色 */
+            -webkit-text-fill-color: inherit;
+            background: none;
+            /* 去掉误加的渐变，由 .reveal::before 控制 */
+            display: inline-block;
+        }
+
+        /* 鼠标渐变揭示：默认显示普通文本，伪元素承载渐变文本并通过掩膜显示 */
+        .reveal {
+            position: relative;
+            display: inline-block;
+        }
+
+        .reveal::before {
+            content: attr(data-text);
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(90deg, #0071e3, #6f42c1, #ff2d55);
+            background-clip: text;
+            -webkit-background-clip: text;
+            color: transparent;
+            -webkit-text-fill-color: transparent;
+            opacity: 0;
+            /* 非 hover 时不可见 */
+            transition: opacity 0.12s ease-out;
+            /* 使用掩膜，仅在鼠标附近显示 */
+            -webkit-mask-image: radial-gradient(120px at var(--mx, 50%) var(--my, 50%), #000 40%, transparent 60%);
+            mask-image: radial-gradient(120px at var(--mx, 50%) var(--my, 50%), #000 40%, transparent 60%);
+        }
+
+        .reveal:hover::before {
+            opacity: 1;
+        }
+
+        header p {
+            font-size: 1.3rem;
+            color: #6e6e73;
+            margin-top: 15px;
+        }
+
+        body.dark-theme header p {
+            color: #a1a1a6;
+        }
+
+        /* Section */
+        section {
+            padding: 80px 20px;
+            max-width: 1100px;
+            margin: auto;
+            text-align: center;
+            animation: slideInUp 1s ease-in-out;
+        }
+
+        section h2 {
+            font-size: 2rem;
+            font-weight: 600;
+            margin-bottom: 40px;
+            color: #0071e3;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        section h2 i {
+            font-size: 1.4rem;
+            opacity: 0.9;
+        }
+
+        /* 首页按钮（带拖拽感） */
+        .button-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 20px;
+        }
+
+        .nav-btn {
+            background: linear-gradient(145deg, #f5f5f7, #e5e5ea);
+            border: none;
+            padding: 14px 30px;
+            border-radius: 20px;
+            font-size: 16px;
+            font-weight: 500;
+            color: #1d1d1f;
+            cursor: pointer;
+            transition: transform 0.25s ease, box-shadow 0.25s ease;
+            box-shadow: 0 3px 6px rgba(0, 0, 0, 0.08);
+            transform-style: preserve-3d;
+            animation: fadeIn 0.5s ease-in-out;
+        }
+
+        body.dark-theme .nav-btn {
+            background: linear-gradient(145deg, #1c1c1e, #2c2c2e);
+            color: #f5f5f7;
+        }
+
+        /* Modal */
+        .modal {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.4);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 2000;
+            padding: 20px;
+            animation: modalFadeIn 0.3s ease-out;
+        }
+
+        .modal.hidden {
+            animation: modalFadeOut 0.3s ease-in;
+        }
+
+        .modal-content {
+            background: #fff;
+            color: #1d1d1f;
+            padding: 32px;
+            border-radius: 20px;
+            max-width: 900px;
+            min-height: auto;
+            width: 100%;
+            max-height: 80%;
+            overflow-y: auto;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+            position: relative;
+            animation: fadeInUp 0.3s ease;
+        }
+
+        body.dark-theme .modal-content {
+            background: #1c1c1e;
+            color: #f5f5f7;
+        }
+
+        .modal-title {
+            margin: 0 48px 12px 0;
+            font-size: 1.6rem;
+            font-weight: 700;
+            border-bottom: 1px solid gray;
+            padding-bottom: 24px;
+            /* 动态渐变文本，与 navbar 品牌一致 */
+            background: linear-gradient(90deg, #0071e3, #6f42c1, #ff2d55);
+            background-clip: text;
+            -webkit-background-clip: text;
+            color: transparent;
+            -webkit-text-fill-color: transparent;
+            background-size: 300% 300%;
+            animation: brandGradient 5s linear infinite;
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            .modal-title {
+                animation: none;
+            }
+        }
+
+        .close-btn {
+            position: absolute;
+            top: 18px;
+            right: 18px;
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-size: 22px;
+            color: inherit;
+        }
+
+        .modal-body {
+            line-height: 1.7;
+            font-size: 1rem;
+        }
+
+        .modal-body pre,
+        .modal-body code {
+            font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
+        }
+
+        .modal-body pre {
+            /* 原有样式基础上增强可视区分 */
+            background: #f5f5f7;
+            color: #1d1d1f;
+            padding: 14px 16px;
+            border-radius: 12px;
+            overflow-x: auto;
+            margin: 16px 0;
+            /* 增加上下间距 */
+            border: 1px solid #e5e5ea;
+            /* 细边框 */
+            border-left: 4px solid #0071e3;
+            /* 左侧强调条 */
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+        }
+
+        .modal-body pre code {
+            background: transparent;
+            /* 避免双重背景 */
+        }
+
+        /* 行内代码样式 */
+        .modal-body :not(pre) > code {
+            background: #efeff2;
+            color: inherit;
+            padding: 0.15em 0.4em;
+            border-radius: 6px;
+            border: 1px solid #e5e5ea;
+            font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
+        }
+
+        body.dark-theme .modal-body pre {
+            background: #2c2c2e;
+            color: #f5f5f7;
+            border: 1px solid #3a3a3c;
+            border-left-color: #0a84ff;
+            /* 暗色主题强调色 */
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.35);
+        }
+
+        body.dark-theme .modal-body :not(pre) > code {
+            background: #2c2c2e;
+            border-color: #3a3a3c;
+            color: #f5f5f7;
+        }
+
+        .modal-body iframe {
+            width: 100%;
+            height: auto;
+            aspect-ratio: 16 / 9;
+            /* 自适应 16:9 */
+            border: none;
+            border-radius: 12px;
+            background: #000;
+            margin: 12px 0;
+        }
+
+        .modal-footer {
+            text-align: right;
+            margin-top: 20px;
+        }
+
+        .modal-footer .plain-btn {
+            background: #e5e5ea;
+            color: #1d1d1f;
+            padding: 10px 22px;
+            border-radius: 9999px;
+            border: none;
+            cursor: pointer;
+            transition: background 0.2s ease, color 0.2s ease;
+        }
+
+        .modal-footer .plain-btn:hover {
+            background: #0071e3;
+            color: #fff;
+        }
+
+        body.dark-theme .modal-footer .plain-btn {
+            background: #2c2c2e;
+            color: #f5f5f7;
+        }
+
+        body.dark-theme .modal-footer .plain-btn:hover {
+            background: #0071e3;
+            color: #fff;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+
+            to {
+                opacity: 1;
+            }
+        }
+
+        @keyframes slideInUp {
+            from {
+                transform: translateY(20px);
+                opacity: 0;
+            }
+
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        @keyframes modalFadeIn {
+            from {
+                opacity: 0;
+                transform: scale(0.95);
+            }
+
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        @keyframes modalFadeOut {
+            from {
+                opacity: 1;
+                transform: scale(1);
+            }
+
+            to {
+                opacity: 0;
+                transform: scale(0.95);
+            }
+        }
+
+        /* Footer */
+        footer {
+            text-align: center;
+            padding: 60px 20px;
+            font-size: 14px;
+            color: #6e6e73;
+        }
+
+        footer a {
+            color: inherit;
+            text-decoration: underline;
+        }
+
+        footer a:hover {
+            color: #0071e3;
+        }
+
+        body.dark-theme footer {
+            color: #a1a1a6;
+        }
+
+        body.dark-theme footer a:hover {
+            color: #0071e3;
+        }
+
+        /* 主题切换悬浮按钮 */
+        .theme-toggle {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: #0071e3;
+            border: none;
+            cursor: pointer;
+            font-size: 18px;
+            color: #fff;
+            border-radius: 50%;
+            width: 44px;
+            height: 44px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: transform 0.25s ease, background 0.25s ease;
+            z-index: 2100;
+        }
+
+        .theme-toggle:hover {
+            transform: scale(1.1);
+            background: #005bb5;
+        }
+
+        /* 开关样式（导航用） */
+        .switch {
+            position: relative;
+            width: 42px;
+            height: 24px;
+            display: inline-block;
+        }
+
+        .switch-input {
+            position: absolute;
+            opacity: 0;
+            inset: 0;
+        }
+
+        .switch-slider {
+            position: absolute;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.15);
+            border-radius: 9999px;
+            transition: background 0.2s ease;
+        }
+
+        .switch-slider::after {
+            content: "";
+            position: absolute;
+            top: 3px;
+            left: 3px;
+            width: 18px;
+            height: 18px;
+            background: #fff;
+            border-radius: 50%;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+            transition: transform 0.2s ease;
+        }
+
+        .switch-input:checked+.switch-slider {
+            background: #0071e3;
+        }
+
+        .switch-input:checked+.switch-slider::after {
+            transform: translateX(18px);
+        }
+
+        body.dark-theme .switch-slider {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        body.dark-theme .switch-input:checked+.switch-slider {
+            background: #0a84ff;
+        }
+
+        /* md 内容中的标题与段落微调 */
+        .modal-body h1,
+        .modal-body h2,
+        .modal-body h3 {
+            margin: 0.6em 0 0.4em;
+        }
+
+        .modal-body p {
+            margin: 0.6em 0;
+        }
+
+        .modal-body ul,
+        .modal-body ol {
+            margin: 0.6em 0 0.6em 1.2em;
+        }
+
+        .modal-body a {
+            color: #0071e3;
+            text-decoration: none;
+        }
+
+        .modal-body a:hover {
+            text-decoration: underline;
+        }
+
+        .modal-body img {
+            max-width: 100%;
+            height: auto;
+            cursor: pointer;
+            /* 鼠标悬停显示可点击 */
+        }
+
+        .image-preview {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.8);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 3000;
+        }
+
+        .image-preview img {
+            max-width: 90%;
+            max-height: 90%;
+        }
+
+        .image-preview .close-btn {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-size: 24px;
+            color: #fff;
+        }
+
+        .image-preview .hint {
+            position: absolute;
+            bottom: 20px;
+            color: #fff;
+            font-size: 14px;
+        }
+
+        /* 通用导航图标按钮样式 */
+        nav .icon-btn {
+            position: static;
+            background: transparent;
+            color: inherit;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        nav .icon-btn:hover {
+            background: rgba(0, 0, 0, 0.06);
+        }
+
+        body.dark-theme nav .icon-btn:hover {
+            background: rgba(255, 255, 255, 0.12);
+        }
+
+        /* 仅启用时才显示鼠标渐变揭示 */
+        .cursor-effect-enabled .reveal:hover::before {
+            opacity: 1;
+        }
+
+        /* 语言切换按钮 */
+        .lang-btn {
+            background: transparent;
+            border: none;
+            cursor: pointer;
+            color: inherit;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            font-size: 13px;
+            font-weight: 600;
+            font-family: inherit;
+            padding: 5px 10px;
+            border-radius: 9999px;
+            height: 36px;
+            transition: background 0.2s ease;
+        }
+
+        .lang-btn:hover {
+            background: rgba(0, 0, 0, 0.06);
+        }
+
+        body.dark-theme .lang-btn:hover {
+            background: rgba(255, 255, 255, 0.12);
+        }
+
+        .lang-btn .fa-globe {
+            font-size: 14px;
+            opacity: 0.85;
+        }
+    
+    </style>
+</head>
+
+<body>
+    <!-- 顶部导航 -->
+    <nav>
+        <div class="nav-brand">
+            <span class="brand-text">HowToRise.net</span>
+        </div>
+        <div class="nav-center">
+            <a href="#Account" data-i18n="navAccount">Account</a>
+            <a href="#Issues" data-i18n="navIssues">Issues</a>
+            <a href="#Docs" data-i18n="navDocs">Docs</a>
+            <a href="#Run" data-i18n="navRun">Run</a>
+        </div>
+        <div class="nav-actions">
+            <button class="lang-btn" id="lang-toggle" title="切换语言 / Switch Language">
+                <i class="fa-solid fa-globe"></i>
+                <span id="lang-label">中文</span>
+            </button>
+            <div class="switch-group">
+                <button class="theme-toggle" id="theme-toggle" title="Toggle theme">
+                    <i class="fa-solid fa-moon"></i>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero -->
+    <header>
+        <h1><span class="reveal" data-text="HowToRise.net">HowToRise.net</span></h1>
+        <p data-i18n="heroSubtitle">Guides · Fixes · Resources</p>
+    </header>
+
+    <!-- 分类容器（JS 动态注入） -->
+    <main id="categories"></main>
+
+    <footer><span data-i18n="footerText">Made with ❤️ by Leo · Rise Forever ·</span> <a href="#" id="open-credits" data-i18n="credits">Credits</a> · <span id="last-updated"></span></footer>
+
+    <!-- 全局 Modal（复用） -->
+    <div id="tutorial-modal" class="modal" aria-hidden="true">
+        <div class="modal-content" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+            <button class="close-btn" id="modal-close" aria-label="Close">&times;</button>
+            <h3 class="modal-title" id="modal-title"></h3>
+            <div class="modal-body" id="modal-body"></div>
+            <div class="modal-footer">
+                <button class="plain-btn" id="modal-close-2" data-i18n="modalClose">Close</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // ========== i18n 国际化系统 ==========
+        const translations = {
+            en: {
+                navAccount: 'Account',
+                navIssues: 'Issues',
+                navDocs: 'Docs',
+                navRun: 'Run',
+                heroSubtitle: 'Guides \u00B7 Fixes \u00B7 Resources',
+                modalLoading: 'Loading\u2026',
+                modalPleaseWait: 'Please wait\u2026',
+                modalClose: 'Close',
+                footerText: 'Made with \u2764\uFE0F by Leo \u00B7 Rise Forever \u00B7',
+                credits: 'Credits',
+                lastUpdated: 'Last updated: ',
+                imageHint: 'Click anywhere to close',
+                loadError: 'Failed to load tutorials.json, please contact the site admin.',
+                toggleLang: '\u4e2d\u6587',
+                creditsTitle: 'Credits',
+                creditsHtml: `
+                    <p>Thanks to everyone who contributed to this project!</p>
+                    <p><strong>Website:</strong></p>
+                    <ul>
+                        <li>Design &amp; Dev: Leo (Discord: leo728)</li>
+                        <li>Icons: <a href="https://fontawesome.com/" target="_blank" rel="noopener noreferrer">Font Awesome</a></li>
+                        <li>Markdown: <a href="https://marked.js.org/" target="_blank" rel="noopener noreferrer">marked</a></li>
+                        <li>Sanitization: <a href="https://github.com/cure53/DOMPurify" target="_blank" rel="noopener noreferrer">DOMPurify</a></li>
+                        <li>Cursor Effects: <a href="https://github.com/tholman/cursor-effects" target="_blank" rel="noopener noreferrer">Tholman</a></li>
+                    </ul>
+                    <p><strong>Content Contributors:</strong></p>
+                    <ul>
+                        <li>Leo</li><li>Zac</li><li>Nyan</li><li>Beta</li>
+                        <li>MoldyToe</li><li>Alan</li>
+                        <li>And many others who provided valuable feedback and suggestions!</li>
+                    </ul>
+                    <p>If you'd like to contribute, please reach out to Leo via Discord!</p>
+                `
+            },
+            zh: {
+                navAccount: '\u8d26\u53f7',
+                navIssues: '\u95ee\u9898',
+                navDocs: '\u6587\u6863',
+                navRun: '\u8fd0\u884c',
+                heroSubtitle: '\u6559\u7a0b \u00B7 \u4fee\u590d \u00B7 \u8d44\u6e90',
+                modalLoading: '\u52a0\u8f7d\u4e2d\u2026',
+                modalPleaseWait: '\u8bf7\u7a0d\u5019\u2026',
+                modalClose: '\u5173\u95ed',
+                footerText: '\u7531 Leo \u7528 \u2764\uFE0F \u5236\u4f5c \u00B7 Rise \u6c38\u5b58 \u00B7',
+                credits: '\u81f4\u8c22',
+                lastUpdated: '\u6700\u540e\u66f4\u65b0\uff1a',
+                imageHint: '\u70b9\u51fb\u4efb\u610f\u5904\u5173\u95ed',
+                loadError: '\u6559\u7a0b\u6570\u636e\u52a0\u8f7d\u5931\u8d25\uff0c\u8bf7\u8054\u7cfb\u7f51\u7ad9\u7ba1\u7406\u5458\u3002',
+                toggleLang: 'English',
+                creditsTitle: '\u81f4\u8c22',
+                creditsHtml: `
+                    <p>\u611f\u8c22\u6240\u6709\u4e3a\u6b64\u9879\u76ee\u505a\u51fa\u8d21\u732e\u7684\u4eba\uff01</p>
+                    <p><strong>\u7f51\u7ad9\uff1a</strong></p>
+                    <ul>
+                        <li>\u8bbe\u8ba1 &amp; \u5f00\u53d1\uff1a Leo (Discord: leo728)</li>
+                        <li>\u56fe\u6807\uff1a <a href="https://fontawesome.com/" target="_blank" rel="noopener noreferrer">Font Awesome</a></li>
+                        <li>Markdown \u89e3\u6790\uff1a <a href="https://marked.js.org/" target="_blank" rel="noopener noreferrer">marked</a></li>
+                        <li>XSS \u9632\u62a4\uff1a <a href="https://github.com/cure53/DOMPurify" target="_blank" rel="noopener noreferrer">DOMPurify</a></li>
+                        <li>\u9f20\u6807\u7279\u6548\uff1a <a href="https://github.com/tholman/cursor-effects" target="_blank" rel="noopener noreferrer">Tholman</a></li>
+                    </ul>
+                    <p><strong>\u5185\u5bb9\u8d21\u732e\u8005\uff1a</strong></p>
+                    <ul>
+                        <li>Leo</li><li>Zac</li><li>Nyan</li><li>Beta</li>
+                        <li>MoldyToe</li><li>Alan</li>
+                        <li>\u4ee5\u53ca\u6240\u6709\u63d0\u4f9b\u5b9d\u8d35\u610f\u89c1\u548c\u5efa\u8bae\u7684\u4eba\uff01</li>
+                    </ul>
+                    <p>\u5982\u679c\u4f60\u60f3\u8d21\u732e\uff0c\u8bf7\u901a\u8fc7 Discord \u8054\u7cfb Leo\uff01</p>
+                `
+            }
+        };
+
+        let currentLang = localStorage.getItem('lang') || 'en';
+
+        function t(key) {
+            return (translations[currentLang] && translations[currentLang][key] !== undefined)
+                ? translations[currentLang][key]
+                : (translations['en'][key] || key);
+        }
+
+        function applyI18n() {
+            document.documentElement.lang = currentLang;
+            document.querySelectorAll('[data-i18n]').forEach(el => {
+                el.textContent = t(el.getAttribute('data-i18n'));
+            });
+            const langLabel = document.getElementById('lang-label');
+            if (langLabel) langLabel.textContent = t('toggleLang');
+            if (window._tutorialsData) renderCategories(window._tutorialsData);
+            setLastUpdated();
+        }
+
+        function toggleLang() {
+            currentLang = currentLang === 'en' ? 'zh' : 'en';
+            localStorage.setItem('lang', currentLang);
+            applyI18n();
+        }
+
+        document.getElementById('lang-toggle').addEventListener('click', toggleLang);
+
+        // ========== 主题切换 ==========
+        const themeBtn = document.getElementById('theme-toggle');
+
+        function setThemeIcon(isDark) {
+            if (!themeBtn) return;
+            themeBtn.innerHTML = `<i class="fa-solid ${isDark ? 'fa-sun' : 'fa-moon'}"></i>`;
+        }
+
+        function applySavedOrSystemTheme() {
+            const saved = localStorage.getItem('theme');
+            const isDark = saved ? (saved === 'dark') : window.matchMedia('(prefers-color-scheme: dark)').matches;
+            document.body.classList.toggle('dark-theme', isDark);
+            setThemeIcon(isDark);
+        }
+
+        function toggleTheme() {
+            const isDark = !document.body.classList.contains('dark-theme');
+            document.body.classList.toggle('dark-theme', isDark);
+            localStorage.setItem('theme', isDark ? 'dark' : 'light');
+            setThemeIcon(isDark);
+        }
+
+        themeBtn.addEventListener('click', toggleTheme);
+        applySavedOrSystemTheme();
+
+        // ========== Cursor Effect ==========
+        let cursorTrailNodes = [];
+
+        function startCursorTrail() {
+            if (!window.cursoreffects) return;
+            if (cursorTrailNodes.length) return;
+            const before = new Set(document.querySelectorAll('canvas'));
+            new cursoreffects.trailingCursor();
+            requestAnimationFrame(() => {
+                const after = Array.from(document.querySelectorAll('canvas'));
+                after.forEach(node => { if (!before.has(node)) cursorTrailNodes.push(node); });
+            });
+        }
+
+        function applyCursorSetting() {
+            const enabled = true;
+            document.body.classList.toggle('cursor-effect-enabled', enabled);
+            if (enabled) startCursorTrail();
+        }
+
+        applyCursorSetting();
+
+        // ========== 动态渲染分类与按钮 ==========
+        const categoriesEl = document.getElementById('categories');
+
+        async function loadCategories() {
+            try {
+                const res = await fetch('tutorials.json', { cache: 'no-cache' });
+                if (!res.ok) throw new Error(t('loadError'));
+                const data = await res.json();
+                window._tutorialsData = data;
+                renderCategories(data);
+            } catch (err) {
+                categoriesEl.innerHTML = `<p style="text-align:center;color:#e11d48;">Error: ${err.message}</p>`;
+            }
+        }
+
+        function renderCategories(data) {
+            categoriesEl.innerHTML = '';
+            data.forEach(section => {
+                const sec = document.createElement('section');
+                sec.id = section.sectionId || section.title.replace(/\s+/g, '');
+                const title = (currentLang === 'zh' && section.titleZh) ? section.titleZh : section.title;
+                sec.innerHTML = `
+                    <h2>${section.icon ? `<i class="${section.icon}"></i>` : ''} ${title}</h2>
+                    <div class="button-container">${(section.items || []).map(item => {
+                        const label = (currentLang === 'zh' && item.labelZh) ? item.labelZh : item.label;
+                        return `<button class="nav-btn"
+                            data-id="${item.id}"
+                            data-file-en="${item.file}"
+                            data-file-zh="${item.fileZh || item.file}"
+                            data-title-en="${item.label.replace(/"/g, '&quot;')}"
+                            data-title-zh="${(item.labelZh || item.label).replace(/"/g, '&quot;')}"
+                        >${label}</button>`;
+                    }).join('')}</div>
+                `;
+                categoriesEl.appendChild(sec);
+            });
+
+            document.querySelectorAll('.nav-btn').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    const title = currentLang === 'zh'
+                        ? (btn.getAttribute('data-title-zh') || btn.getAttribute('data-title-en'))
+                        : btn.getAttribute('data-title-en');
+                    const file = currentLang === 'zh'
+                        ? (btn.getAttribute('data-file-zh') || btn.getAttribute('data-file-en'))
+                        : btn.getAttribute('data-file-en');
+                    openModal(title || 'Tutorial', file);
+                });
+            });
+
+            attachDragHover('.nav-btn');
+        }
+
+        // ========== iPadOS 式拖拽感 ==========
+        function attachDragHover(selector) {
+            document.querySelectorAll(selector).forEach(btn => {
+                btn.addEventListener('mousemove', e => {
+                    const rect = btn.getBoundingClientRect();
+                    const x = e.clientX - rect.left, y = e.clientY - rect.top;
+                    const cx = rect.width / 2, cy = rect.height / 2;
+                    const rotateX = ((y - cy) / cy) * 6;
+                    const rotateY = ((x - cx) / cx) * -6;
+                    btn.style.transform = `perspective(600px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale(1.05)`;
+                    btn.style.boxShadow = `${-rotateY * 2}px ${rotateX * 2}px 20px rgba(0, 113, 227, 0.3)`;
+                });
+                btn.addEventListener('mouseleave', () => {
+                    btn.style.transform = 'perspective(600px) rotateX(0deg) rotateY(0deg) scale(1)';
+                    btn.style.boxShadow = '0 3px 6px rgba(0, 0, 0, 0.08)';
+                });
+            });
+        }
+
+        // ========== Modal 逻辑 ==========
+        const modal = document.getElementById('tutorial-modal');
+        const modalTitle = document.getElementById('modal-title');
+        const modalBody = document.getElementById('modal-body');
+        const modalClose = document.getElementById('modal-close');
+        const modalClose2 = document.getElementById('modal-close-2');
+
+        function showModal() {
+            modal.classList.remove('hidden');
+            modal.style.display = 'flex';
+            modal.setAttribute('aria-hidden', 'false');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function hideModal() {
+            modal.classList.add('hidden');
+            setTimeout(() => {
+                modal.style.display = 'none';
+                modal.setAttribute('aria-hidden', 'true');
+                document.body.style.overflow = '';
+            }, 300);
+        }
+
+        modalClose.addEventListener('click', hideModal);
+        modalClose2.addEventListener('click', hideModal);
+        window.addEventListener('click', (e) => { if (e.target === modal) hideModal(); });
+        window.addEventListener('keydown', (e) => { if (e.key === 'Escape' && modal.style.display === 'flex') hideModal(); });
+
+        // ========== 安全白名单 Hook ==========
+        let iframeHookAdded = false;
+
+        async function openModal(title, mdPath) {
+            modalTitle.textContent = title || t('modalLoading');
+            modalBody.innerHTML = t('modalPleaseWait');
+            showModal();
+            try {
+                const res = await fetch(mdPath, { cache: 'no-cache' });
+                if (!res.ok) throw new Error(
+                    currentLang === 'zh'
+                        ? `\u6587\u4ef6\u52a0\u8f7d\u5931\u8d25\uff1a${mdPath}\uff0c\u8bf7\u8054\u7cfb\u7f51\u7ad9\u7ba1\u7406\u5458\u3002`
+                        : `Failed to load ${mdPath}, please contact the site admin.`
+                );
+                const md = await res.text();
+                const html = marked.parse(md, { breaks: true, gfm: true });
+
+                if (!iframeHookAdded && window.DOMPurify) {
+                    const iframeSrcWhitelist = /^(https?:)?\/\/(?:www\.)?(youtube\.com|youtu\.be|player\.vimeo\.com)\//i;
+                    DOMPurify.addHook('uponSanitizeAttribute', (node, data) => {
+                        if (node && node.nodeName && node.nodeName.toLowerCase() === 'iframe' && data.attrName === 'src') {
+                            if (!iframeSrcWhitelist.test(data.attrValue)) {
+                                data.keepAttr = false;
+                                data.attrValue = '';
+                            }
+                        }
+                    });
+                    iframeHookAdded = true;
+                }
+
+                const purifyCfg = {
+                    ADD_TAGS: ['iframe'],
+                    ADD_ATTR: ['allow', 'allowfullscreen', 'frameborder', 'scrolling', 'src', 'width', 'height', 'title', 'referrerpolicy']
+                };
+                modalBody.innerHTML = DOMPurify.sanitize(html, purifyCfg);
+
+                modalBody.querySelectorAll('a[href]').forEach(a => {
+                    a.setAttribute('target', '_blank');
+                    a.setAttribute('rel', 'noopener noreferrer');
+                });
+
+                document.querySelectorAll('.modal-body img').forEach(img => {
+                    img.addEventListener('click', () => {
+                        const preview = document.createElement('div');
+                        preview.className = 'image-preview';
+                        preview.innerHTML = `
+                            <button class="close-btn" aria-label="Close">&times;</button>
+                            <img src="${img.src}" alt="Image Preview">
+                            <div class="hint">${t('imageHint')}</div>
+                        `;
+                        document.body.appendChild(preview);
+                        preview.style.display = 'flex';
+                        const closePreview = () => {
+                            preview.style.display = 'none';
+                            document.body.removeChild(preview);
+                        };
+                        preview.querySelector('.close-btn').addEventListener('click', closePreview);
+                        preview.addEventListener('click', closePreview);
+                    });
+                });
+            } catch (err) {
+                modalBody.innerHTML = `<p style="color:#e11d48;">${err.message}</p>`;
+            }
+        }
+
+        // ========== Hero 渐变揭示交互 ==========
+        (function () {
+            const el = document.querySelector('header h1 .reveal');
+            if (!el) return;
+            const update = (e) => {
+                const rect = el.getBoundingClientRect();
+                el.style.setProperty('--mx', (e.clientX - rect.left) + 'px');
+                el.style.setProperty('--my', (e.clientY - rect.top) + 'px');
+            };
+            el.addEventListener('mousemove', update);
+            el.addEventListener('mouseenter', update);
+        })();
+
+        // ========== Credits 入口 ==========
+        const creditsBtn = document.getElementById('open-credits');
+        if (creditsBtn) {
+            creditsBtn.addEventListener('click', (e) => {
+                e.preventDefault();
+                modalTitle.textContent = t('creditsTitle');
+                modalBody.innerHTML = t('creditsHtml');
+                modalBody.querySelectorAll('a[href]').forEach(a => {
+                    a.setAttribute('target', '_blank');
+                    a.setAttribute('rel', 'noopener noreferrer');
+                });
+                showModal();
+            });
+        }
+
+        // ========== Last Updated ==========
+        function setLastUpdated() {
+            const el = document.getElementById('last-updated');
+            if (!el) return;
+            const d = new Date(document.lastModified);
+            const valid = !isNaN(d.getTime()) ? d : new Date();
+            const locale = currentLang === 'zh' ? 'zh-CN' : 'en-US';
+            const dateStr = valid.toLocaleDateString(locale, { year: 'numeric', month: 'short', day: '2-digit' });
+            el.textContent = t('lastUpdated') + dateStr;
+        }
+
+        // ========== 启动 ==========
+        applyI18n();
+        loadCategories();
+    </script>
+</body>
+
+</html>

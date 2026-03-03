@@ -1,0 +1,49 @@
+[
+  {
+    "sectionId": "Account",
+    "title": "Account & Access",
+    "titleZh": "账号与访问",
+    "icon": "fas fa-user-circle",
+    "items": [
+      { "label": "How to get my UID?", "labelZh": "如何获取我的 UID？", "id": "uid", "file": "tutorials/uid.md", "fileZh": "tutorials/zh/uid.md" },
+      { "label": "What is my Username?", "labelZh": "我的用户名是什么？", "id": "username", "file": "tutorials/username.md", "fileZh": "tutorials/zh/username.md" },
+      { "label": "How to change my HWID?", "labelZh": "如何更改我的 HWID？", "id": "hwidreset", "file": "tutorials/change-hwid.md", "fileZh": "tutorials/zh/change-hwid.md" },
+      { "label": "How to redeem my Rise key?", "labelZh": "如何兑换我的 Rise 密钥？", "id": "redeem", "file": "tutorials/redeem.md", "fileZh": "tutorials/zh/redeem.md" }
+    ]
+  },
+  {
+    "sectionId": "Issues",
+    "title": "Issues",
+    "titleZh": "问题修复",
+    "icon": "fas fa-bug",
+    "items": [
+      { "label": "How to hide 'OpenGL Error'", "labelZh": "如何隐藏「OpenGL 错误」", "id": "hide-gl", "file": "tutorials/hide-opengl-error.md", "fileZh": "tutorials/zh/hide-opengl-error.md" },
+      { "label": "How to fix no sound issue", "labelZh": "如何修复无声音问题", "id": "nosound", "file": "tutorials/soundfix.md", "fileZh": "tutorials/zh/soundfix.md" },
+      { "label": "How to fix LWJGL & netty issues on Linux", "labelZh": "如何修复 Linux 上的 LWJGL 和 Netty 问题", "id": "linux-fix", "file": "tutorials/linux-fix.md", "fileZh": "tutorials/zh/linux-fix.md" }
+    ]
+  },
+  {
+    "sectionId": "Docs",
+    "title": "Documentation & Resources",
+    "titleZh": "文档与资源",
+    "icon": "fas fa-book",
+    "items": [
+      { "label": "Launcher arguments", "labelZh": "启动器参数", "id": "args", "file": "tutorials/arguments.md", "fileZh": "tutorials/zh/arguments.md" },
+      { "label": "Rise 6 Scripting docs", "labelZh": "Rise 6 脚本文档", "id": "script-docs", "file": "tutorials/scripting-docs.md", "fileZh": "tutorials/zh/scripting-docs.md" },
+      { "label": "Rise Alts Discord Server", "labelZh": "Rise Alts Discord 服务器", "id": "risealts", "file": "tutorials/risealts.md", "fileZh": "tutorials/zh/risealts.md" },
+      { "label": "Json file for other launchers", "labelZh": "第三方启动器 JSON 文件", "id": "json", "file": "tutorials/json.md", "fileZh": "tutorials/zh/json.md" }
+    ]
+  },
+  {
+    "sectionId": "Run",
+    "title": "Setup & Run",
+    "titleZh": "安装与运行",
+    "icon": "fas fa-play-circle",
+    "items": [
+      { "label": "A Complete Beginner's Guide", "labelZh": "完整新手指南", "id": "rise-mc", "file": "tutorials/guidevideo.md", "fileZh": "tutorials/zh/guidevideo.md" },
+      { "label": "How to run on macOS (ARM)", "labelZh": "如何在 macOS (ARM) 上运行", "id": "mac-arm", "file": "tutorials/macos-arm.md", "fileZh": "tutorials/zh/macos-arm.md" },
+      { "label": "How to run on macOS (Intel)", "labelZh": "如何在 macOS (Intel) 上运行", "id": "mac-intel", "file": "tutorials/macos-intel.md", "fileZh": "tutorials/zh/macos-intel.md" },
+      { "label": "To fix all issues with the new launcher on mac", "labelZh": "修复 Mac 新版启动器所有问题", "id": "mac-launcher-fix", "file": "tutorials/mac-launcher-fix.md", "fileZh": "tutorials/zh/mac-launcher-fix.md" }
+    ]
+  }
+]

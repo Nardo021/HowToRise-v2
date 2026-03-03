@@ -1,0 +1,224 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+enum Locale {
+  zh
+  en
+}
+
+enum PublishStatus {
+  draft
+  published
+  offline
+}
+
+enum AnalyticsEventType {
+  page_view
+  tutorial_view
+  duration
+}
+
+model Admin {
+  id           String    @id @default(cuid())
+  email        String    @unique
+  passwordHash String
+  role         String    @default("admin")
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+  sessions     Session[]
+}
+
+model Session {
+  id        String   @id @default(cuid())
+  adminId   String
+  tokenHash String   @unique
+  expiresAt DateTime
+  createdAt DateTime @default(now())
+  admin     Admin    @relation(fields: [adminId], references: [id], onDelete: Cascade)
+}
+
+model Category {
+  id           String                @id @default(cuid())
+  slug         String                @unique
+  createdAt    DateTime              @default(now())
+  updatedAt    DateTime              @updatedAt
+  translations CategoryTranslation[]
+  tutorials    Tutorial[]
+}
+
+model CategoryTranslation {
+  id         String   @id @default(cuid())
+  categoryId String
+  locale     Locale
+  name       String
+  category   Category @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+
+  @@unique([categoryId, locale])
+}
+
+model Tag {
+  id           String           @id @default(cuid())
+  slug         String           @unique
+  createdAt    DateTime         @default(now())
+  updatedAt    DateTime         @updatedAt
+  translations TagTranslation[]
+  tutorials    TutorialTag[]
+}
+
+model TagTranslation {
+  id    String @id @default(cuid())
+  tagId String
+  locale Locale
+  name  String
+  tag   Tag    @relation(fields: [tagId], references: [id], onDelete: Cascade)
+
+  @@unique([tagId, locale])
+}
+
+model Media {
+  id           String    @id @default(cuid())
+  originalPath String
+  thumbPath    String
+  mimeType     String
+  width        Int?
+  height       Int?
+  sizeBytes    Int
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+  tutorials    Tutorial[]
+}
+
+model Tutorial {
+  id               String                @id @default(cuid())
+  slug             String                @unique
+  status           PublishStatus         @default(draft)
+  categoryId       String?
+  coverMediaId     String?
+  youtubeUrl       String?
+  publishedAt      DateTime?
+  offlineAt        DateTime?
+  createdAt        DateTime              @default(now())
+  updatedAt        DateTime              @updatedAt
+  category         Category?             @relation(fields: [categoryId], references: [id], onDelete: SetNull)
+  coverMedia       Media?                @relation(fields: [coverMediaId], references: [id], onDelete: SetNull)
+  tags             TutorialTag[]
+  translations     TutorialTranslation[]
+  analyticsRaw     AnalyticsRawEvent[]
+  analyticsHourly  AnalyticsAggregateHourly[]
+  analyticsDaily   AnalyticsAggregateDaily[]
+}
+
+model TutorialTranslation {
+  id          String   @id @default(cuid())
+  tutorialId  String
+  locale      Locale
+  title       String
+  summary     String?
+  contentMd   String
+  contentHtml String
+  seoTitle    String?
+  seoDesc     String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  tutorial    Tutorial @relation(fields: [tutorialId], references: [id], onDelete: Cascade)
+
+  @@unique([tutorialId, locale])
+  @@index([locale, title])
+}
+
+model TutorialTag {
+  tutorialId String
+  tagId      String
+  tutorial   Tutorial @relation(fields: [tutorialId], references: [id], onDelete: Cascade)
+  tag        Tag      @relation(fields: [tagId], references: [id], onDelete: Cascade)
+
+  @@id([tutorialId, tagId])
+}
+
+model AnalyticsRawEvent {
+  id          String             @id @default(cuid())
+  eventType   AnalyticsEventType
+  path        String
+  locale      Locale
+  tutorialId  String?
+  tutorialSlug String?
+  sessionId   String
+  ipHash      String?
+  userAgent   String?
+  isBot       Boolean            @default(false)
+  dedupeKey   String?
+  country     String?
+  city        String?
+  language    String?
+  referrer    String?
+  utmSource   String?
+  utmMedium   String?
+  utmCampaign String?
+  durationSec Int?
+  createdAt   DateTime           @default(now())
+  tutorial    Tutorial?          @relation(fields: [tutorialId], references: [id], onDelete: SetNull)
+
+  @@index([createdAt])
+  @@index([eventType, createdAt])
+  @@index([locale, createdAt])
+  @@index([path, createdAt])
+}
+
+model AnalyticsAggregateHourly {
+  id            String   @id @default(cuid())
+  bucketStart   DateTime
+  locale        Locale
+  path          String?
+  tutorialId    String?
+  country       String?
+  source        String?
+  pv            Int      @default(0)
+  uv            Int      @default(0)
+  clicks        Int      @default(0)
+  avgDurationSec Float   @default(0)
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+  tutorial      Tutorial? @relation(fields: [tutorialId], references: [id], onDelete: SetNull)
+
+  @@unique([bucketStart, locale, path, tutorialId, country, source])
+  @@index([bucketStart, locale])
+}
+
+model AnalyticsAggregateDaily {
+  id            String   @id @default(cuid())
+  bucketDate    DateTime
+  locale        Locale
+  path          String?
+  tutorialId    String?
+  country       String?
+  source        String?
+  pv            Int      @default(0)
+  uv            Int      @default(0)
+  clicks        Int      @default(0)
+  avgDurationSec Float   @default(0)
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+  tutorial      Tutorial? @relation(fields: [tutorialId], references: [id], onDelete: SetNull)
+
+  @@unique([bucketDate, locale, path, tutorialId, country, source])
+  @@index([bucketDate, locale])
+}
+
+model ErrorEvent {
+  id         String   @id @default(cuid())
+  scope      String
+  message    String
+  stack      String?
+  path       String?
+  sessionId  String?
+  userAgent  String?
+  createdAt  DateTime @default(now())
+
+  @@index([scope, createdAt])
+}
